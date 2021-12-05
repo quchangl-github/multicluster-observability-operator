@@ -38,11 +38,9 @@ pipeline {
                 export SKIP_INSTALL_STEP="${params.SKIP_INSTALL_STEP}"
                 export SKIP_UNINSTALL_STEP="${params.SKIP_UNINSTALL_STEP}"
                 
-                if "${!params.USE_MINIO}" = false; then
+                if "${!params.USE_MINIO}" == false; then
                   export IS_CANARY_ENV=true
                 fi  
-                
-                export IS_CANARY_ENV="${!params.USE_MINIO}"
                 
                 if [[ -z "${HUB_CLUSTER_NAME}" || -z "${BASE_DOMAIN}" || -z "${OC_CLUSTER_USER}" || -z "${OC_HUB_CLUSTER_PASS}" || -z "${OC_HUB_CLUSTER_API_URL}" ]]; then
                     echo "Aborting test.. OCP HUB details are required for the test execution"
