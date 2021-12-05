@@ -11,6 +11,12 @@ pipeline {
         string(name:'OC_CLUSTER_USER', defaultValue: 'kubeadmin', description: 'OCP Hub User Name')
         string(name:'OC_HUB_CLUSTER_PASS', defaultValue: '', description: 'OCP Hub Password')
         string(name:'OC_HUB_CLUSTER_API_URL', defaultValue: '', description: 'OCP Hub API URL')
+        string(name:'BUCKET', defaultValue: '', description: 'Bucket name')
+        string(name:'REGION', defaultValue: 'us-east-1', description: 'Bucket region')
+        string(name:'AWS_ACCESS_KEY_ID', defaultValue: '', description: 'AWS access key ID')
+        string(name:'AWS_SECRET_ACCESS_KEY', defaultValue: '', description: 'AWS secret access key')
+        string(name:'SKIP_INSTALL_STEP', defaultValue: 'False', description: 'Skip Observability installation')
+        string(name:'SKIP_UNINSTALL_STEP', defaultValue: 'False', description: 'Skip Observability uninstallation')
     }
     environment {
         CI = 'true'
@@ -24,6 +30,13 @@ pipeline {
                 export OC_HUB_CLUSTER_API_URL="${params.OC_HUB_CLUSTER_API_URL}"
                 export HUB_CLUSTER_NAME="${params.HUB_CLUSTER_NAME}"
                 export BASE_DOMAIN="${params.BASE_DOMAIN}"
+                export BUCKET="${params.BUCKET}"
+                export REGION="${params.REGION}"
+                export AWS_ACCESS_KEY_ID="${params.AWS_ACCESS_KEY_ID}"
+                export AWS_SECRET_ACCESS_KEY="${params.AWS_SECRET_ACCESS_KEY}"
+                export SKIP_INSTALL_STEP="${params.SKIP_INSTALL_STEP}"
+                export SKIP_UNINSTALL_STEP="${params.SKIP_UNINSTALL_STEP}"
+                
                 if [[ -z "${HUB_CLUSTER_NAME}" || -z "${BASE_DOMAIN}" || -z "${OC_CLUSTER_USER}" || -z "${OC_HUB_CLUSTER_PASS}" || -z "${OC_HUB_CLUSTER_API_URL}" ]]; then
                     echo "Aborting test.. OCP HUB details are required for the test execution"
                     exit 1
