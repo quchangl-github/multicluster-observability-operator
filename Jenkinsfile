@@ -17,6 +17,7 @@ pipeline {
         string(name:'AWS_SECRET_ACCESS_KEY', defaultValue: '', description: 'AWS secret access key')
         string(name:'SKIP_INSTALL_STEP', defaultValue: 'False', description: 'Skip Observability installation')
         string(name:'SKIP_UNINSTALL_STEP', defaultValue: 'False', description: 'Skip Observability uninstallation')
+        string(name:'USE_MINIO', defaultValue: 'False', description: 'If you don't have AWS S3 bucket, you could use minio as object storage to instead')
     }
     environment {
         CI = 'true'
@@ -36,6 +37,7 @@ pipeline {
                 export AWS_SECRET_ACCESS_KEY="${params.AWS_SECRET_ACCESS_KEY}"
                 export SKIP_INSTALL_STEP="${params.SKIP_INSTALL_STEP}"
                 export SKIP_UNINSTALL_STEP="${params.SKIP_UNINSTALL_STEP}"
+                export IS_CANARY_ENV="${!params.USE_MINIO}"
                 
                 if [[ -z "${HUB_CLUSTER_NAME}" || -z "${BASE_DOMAIN}" || -z "${OC_CLUSTER_USER}" || -z "${OC_HUB_CLUSTER_PASS}" || -z "${OC_HUB_CLUSTER_API_URL}" ]]; then
                     echo "Aborting test.. OCP HUB details are required for the test execution"
