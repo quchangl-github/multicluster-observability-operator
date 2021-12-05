@@ -17,7 +17,7 @@ pipeline {
         string(name:'AWS_SECRET_ACCESS_KEY', defaultValue: '', description: 'AWS secret access key')
         string(name:'SKIP_INSTALL_STEP', defaultValue: 'False', description: 'Skip Observability installation')
         string(name:'SKIP_UNINSTALL_STEP', defaultValue: 'False', description: 'Skip Observability uninstallation')
-        string(name:'USE_MINIO', defaultValue: 'False', description: 'If you don't have AWS S3 bucket, you could use minio as object storage to instead')
+        string(name:'USE_MINIO', defaultValue: 'False', description: 'If no AWS S3 bucket, you could use minio as object storage to instead')
     }
     environment {
         CI = 'true'
