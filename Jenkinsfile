@@ -38,7 +38,7 @@ pipeline {
                 export SKIP_INSTALL_STEP="${params.SKIP_INSTALL_STEP}"
                 export SKIP_UNINSTALL_STEP="${params.SKIP_UNINSTALL_STEP}"
                 
-                if "${!params.USE_MINIO}" == false; then
+                if [[ "${!params.USE_MINIO}" == false ]]; then
                   export IS_CANARY_ENV=true
                 fi  
                 
