@@ -11,13 +11,13 @@ pipeline {
         string(name:'OC_CLUSTER_USER', defaultValue: 'kubeadmin', description: 'OCP Hub User Name')
         string(name:'OC_HUB_CLUSTER_PASS', defaultValue: '', description: 'OCP Hub Password')
         string(name:'OC_HUB_CLUSTER_API_URL', defaultValue: '', description: 'OCP Hub API URL')
-        string(name:'BUCKET', defaultValue: '', description: 'Bucket name')
+        string(name:'BUCKET', defaultValue: 'obs-v1', description: 'Bucket name')
         string(name:'REGION', defaultValue: 'us-east-1', description: 'Bucket region')
-        string(name:'AWS_ACCESS_KEY_ID', defaultValue: '', description: 'AWS access key ID')
-        string(name:'AWS_SECRET_ACCESS_KEY', defaultValue: '', description: 'AWS secret access key')
-        string(name:'SKIP_INSTALL_STEP', defaultValue: 'False', description: 'Skip Observability installation')
-        string(name:'SKIP_UNINSTALL_STEP', defaultValue: 'False', description: 'Skip Observability uninstallation')
-        string(name:'USE_MINIO', defaultValue: 'False', description: 'If no AWS S3 bucket, you could use minio as object storage to instead')
+        password(name:'AWS_ACCESS_KEY_ID', defaultValue: '', description: 'AWS access key ID')
+        password(name:'AWS_SECRET_ACCESS_KEY', defaultValue: '', description: 'AWS secret access key')
+        string(name:'SKIP_INSTALL_STEP', defaultValue: 'false', description: 'Skip Observability installation')
+        string(name:'SKIP_UNINSTALL_STEP', defaultValue: 'false', description: 'Skip Observability uninstallation')
+        string(name:'USE_MINIO', defaultValue: 'false', description: 'If no AWS S3 bucket, you could use minio as object storage to instead')
     }
     environment {
         CI = 'true'
