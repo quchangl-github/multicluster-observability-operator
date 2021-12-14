@@ -38,11 +38,11 @@ pipeline {
                 export SKIP_INSTALL_STEP="${params.SKIP_INSTALL_STEP}"
                 export SKIP_UNINSTALL_STEP="${params.SKIP_UNINSTALL_STEP}"
                 
-                if ["${params.AWS_ACCESS_KEY_ID}"!=""]; then
+                if ["${params.AWS_ACCESS_KEY_ID}" -n ""]; then
                     export AWS_ACCESS_KEY_ID="${params.AWS_ACCESS_KEY_ID}"
                 fi
                 
-                if ["${params.AWS_SECRET_ACCESS_KEY}"!=""]; then
+                if ["${params.AWS_SECRET_ACCESS_KEY}" -n ""]; then
                     export AWS_SECRET_ACCESS_KEY="${params.AWS_SECRET_ACCESS_KEY}"
                 fi
                 
