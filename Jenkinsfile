@@ -35,10 +35,16 @@ pipeline {
                 export BASE_DOMAIN="${params.BASE_DOMAIN}"
                 export BUCKET="${params.BUCKET}"
                 export REGION="${params.REGION}"
-                export AWS_ACCESS_KEY_ID="${params.AWS_ACCESS_KEY_ID}"
-                export AWS_SECRET_ACCESS_KEY="${params.AWS_SECRET_ACCESS_KEY}"
                 export SKIP_INSTALL_STEP="${params.SKIP_INSTALL_STEP}"
                 export SKIP_UNINSTALL_STEP="${params.SKIP_UNINSTALL_STEP}"
+                
+                if [${params.AWS_ACCESS_KEY_ID}]; then
+                    export AWS_ACCESS_KEY_ID="${params.AWS_ACCESS_KEY_ID}"
+                fi
+                
+                if [${params.AWS_SECRET_ACCESS_KEY}]; then
+                    export AWS_SECRET_ACCESS_KEY="${params.AWS_SECRET_ACCESS_KEY}"
+                fi
                 
                 if [[ "${!params.USE_MINIO}" == false ]]; then
                   export IS_CANARY_ENV=true
