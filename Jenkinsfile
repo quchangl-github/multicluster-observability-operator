@@ -16,11 +16,13 @@ pipeline {
         password(name:'AWS_ACCESS_KEY_ID', defaultValue: '', description: 'AWS access key ID')
         password(name:'AWS_SECRET_ACCESS_KEY', defaultValue: '', description: 'AWS secret access key')
         string(name:'SKIP_INSTALL_STEP', defaultValue: 'false', description: 'Skip Observability installation')
-        string(name:'SKIP_UNINSTALL_STEP', defaultValue: 'false', description: 'Skip Observability uninstallation')
+        string(name:'SKIP_UNINSTALL_STEP', defaultValue: 'true', description: 'Skip Observability uninstallation')
         string(name:'USE_MINIO', defaultValue: 'false', description: 'If no AWS S3 bucket, you could use minio as object storage to instead')
     }
     environment {
         CI = 'true'
+        AWS_SECRET_ACCESS_KEY = credentials('cqu_aws_secret_access_key')  
+        AWS_ACCESS_KEY_ID = credentials('cqu_aws_access_key')
     }
     stages {
         stage('Test Run') {
