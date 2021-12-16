@@ -12,6 +12,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/klog"
 
 	"github.com/open-cluster-management/multicluster-observability-operator/tests/pkg/kustomize"
 	"github.com/open-cluster-management/multicluster-observability-operator/tests/pkg/utils"
@@ -32,7 +33,7 @@ func installMCO() {
 		testOptions.KubeConfig,
 		testOptions.HubCluster.KubeContext)
 
-	By("Checking MCO operator is existed")
+	By("Checking MCO operator is started up and running")
 	podList, err := hubClient.CoreV1().Pods("").List(context.TODO(), metav1.ListOptions{LabelSelector: MCO_LABEL})
 	Expect(len(podList.Items)).To(Equal(1))
 	Expect(err).NotTo(HaveOccurred())
@@ -58,7 +59,7 @@ func installMCO() {
 		}
 	}(testOptions, false, mcoNs, mcoPod, "multicluster-observability-operator", false, 1000)
 
-	By("Checking Required CRDs is existed")
+	By("Checking Required CRDs are created")
 	Eventually(func() error {
 		return utils.HaveCRDs(testOptions.HubCluster, testOptions.KubeConfig,
 			[]string{
@@ -177,4 +178,10 @@ func installMCO() {
 		testFailed = false
 		return nil
 	}, EventuallyTimeoutMinute*5, EventuallyIntervalSecond*5).Should(Succeed())
+
+	BearerToken, err = utils.FetchBearerToken(testOptions)
+	if err != nil {
+		klog.Errorf("fetch bearer token error: %v", err)
+	}
+	Expect(BearerToken).NotTo(BeEmpty(), "failed to fetch `BearerToken`")
 }
