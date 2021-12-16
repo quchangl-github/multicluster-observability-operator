@@ -11,7 +11,7 @@ pipeline {
         string(name:'OC_CLUSTER_USER', defaultValue: 'kubeadmin', description: 'OCP Hub User Name')
         string(name:'OC_HUB_CLUSTER_PASS', defaultValue: '', description: 'OCP Hub Password')
         string(name:'OC_HUB_CLUSTER_API_URL', defaultValue: '', description: 'OCP Hub API URL')
-        string(name:'BUCKET', defaultValue: '', description: 'Bucket name')
+        string(name:'BUCKET', defaultValue: 'obs-v1', description: 'Bucket name')
         string(name:'REGION', defaultValue: 'us-east-1', description: 'Bucket region')
         password(name:'AWS_ACCESS_KEY_ID', defaultValue: '', description: 'AWS access key ID')
         password(name:'AWS_SECRET_ACCESS_KEY', defaultValue: '', description: 'AWS secret access key')
