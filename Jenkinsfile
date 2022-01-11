@@ -11,6 +11,11 @@ pipeline {
         string(name:'OC_CLUSTER_USER', defaultValue: 'kubeadmin', description: 'OCP Hub User Name')
         string(name:'OC_HUB_CLUSTER_PASS', defaultValue: '', description: 'OCP Hub Password')
         string(name:'OC_HUB_CLUSTER_API_URL', defaultValue: '', description: 'OCP Hub API URL')
+        string(name:'MANAGED_CLUSTER_NAME', defaultValue: '', description: 'Managed cluster name')
+        string(name:'MANAGED_CLUSTER_BASE_DOMAIN', defaultValue: '', description: 'Managed cluster base domain')
+        string(name:'MANAGED_CLUSTER_USER', defaultValue: 'kubeadmin', description: 'Managed Cluster User Name')
+        string(name:'MANAGED_CLUSTER_PASS', defaultValue: '', description: 'Managed cluster Password')
+        string(name:'MANAGED_CLUSTER_API_URL', defaultValue: '', description: 'Managed cluster API URL')
         string(name:'BUCKET', defaultValue: 'obs-v1', description: 'Bucket name')
         string(name:'REGION', defaultValue: 'us-east-1', description: 'Bucket region')
         password(name:'AWS_ACCESS_KEY_ID', defaultValue: '', description: 'AWS access key ID')
@@ -33,6 +38,11 @@ pipeline {
                 export OC_HUB_CLUSTER_API_URL="${params.OC_HUB_CLUSTER_API_URL}"
                 export HUB_CLUSTER_NAME="${params.HUB_CLUSTER_NAME}"
                 export BASE_DOMAIN="${params.BASE_DOMAIN}"
+                export MANAGED_CLUSTER_NAME="${params.MANAGED_CLUSTER_NAME}"
+                export MANAGED_CLUSTER_BASE_DOMAIN="${params.MANAGED_CLUSTER_BASE_DOMAIN}"
+                export MANAGED_CLUSTER_USER="${params.MANAGED_CLUSTER_USER}"
+                export MANAGED_CLUSTER_PASS="${params.MANAGED_CLUSTER_PASS}"
+                export MANAGED_CLUSTER_API_URL="${params.MANAGED_CLUSTER_API_URL}"
                 export BUCKET="${params.BUCKET}"
                 export REGION="${params.REGION}"
                 export SKIP_INSTALL_STEP="${params.SKIP_INSTALL_STEP}"
@@ -54,6 +64,9 @@ pipeline {
                     echo "Aborting test.. OCP HUB details are required for the test execution"
                     exit 1
                 else
+                    oc login --insecure-skip-tls-verify -u \$MANAGED_CLUSTER_USER -p \$MANAGED_CLUSTER_PASS \$MANAGED_CLUSTER_API_URL
+                    oc config view --minify --raw=true > ~/.kube/managed_kubeconfig
+                    export MAKUBECONFIG=~/.kube/managed_kubeconfig
                     oc login --insecure-skip-tls-verify -u \$OC_CLUSTER_USER -p \$OC_HUB_CLUSTER_PASS \$OC_HUB_CLUSTER_API_URL
                     export KUBECONFIG=~/.kube/config
                     go mod vendor && ginkgo build ./tests/pkg/tests/
@@ -61,6 +74,9 @@ pipeline {
                     cp resources/options.yaml.template resources/options.yaml
                     /usr/local/bin/yq e -i '.options.hub.name="'"\$HUB_CLUSTER_NAME"'"' resources/options.yaml
                     /usr/local/bin/yq e -i '.options.hub.baseDomain="'"\$BASE_DOMAIN"'"' resources/options.yaml
+                    /usr/local/bin/yq e -i '.options.clusters.name="'"\$MANAGED_CLUSTER_NAME"'"' resources/options.yaml
+                    /usr/local/bin/yq e -i '.options.clusters.baseDomain="'"\$MANAGED_CLUSTER_BASE_DOMAIN"'"' resources/options.yaml
+                    /usr/local/bin/yq e -i '.options.clusters.kubeconfig="'"\$MAKUBECONFIG"'"' resources/options.yaml
                     cat resources/options.yaml
                     ginkgo -v pkg/tests/ -- -options=../../resources/options.yaml -v=5
                 fi
